@@ -2,31 +2,9 @@ import { StyleSheet, Text, View, Button, Image, TouchableWithoutFeedback } from 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-function CharactersScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Characters!</Text>
-    </View>
-  );
-}
-
-function FavoritesScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Favorites!</Text>
-    </View>
-  );
-}
-
-function Home() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen name="Characters" component={CharactersScreen} />
-      <Tab.Screen name="Favorites" component={FavoritesScreen} />
-    </Tab.Navigator>
-  );
-}
+import Characters from './components/Views/Characters.js';
+import Favorites from './components/Views/Favorites.js';
+import React, { useState } from 'react';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +15,12 @@ const Badge = ({ badgeCount }) => (
 );
 
 export default function App() {
-
+  const [state, setState] = useState({
+    loading: true,
+    randomUserData: [],
+    loadingExtraData: false,
+    page: 1
+  });
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -60,7 +43,7 @@ export default function App() {
           tabBarInactiveTintColor: 'gray',
 
         })}>
-        <Tab.Screen name="Characters" component={CharactersScreen} options={{
+        <Tab.Screen name="Characters" component={Characters} options={{
           headerTitle: "All Characters (826)", tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerRight: () => (
             <TouchableWithoutFeedback onPress={() => alert('Open Filter Model Window')}>
               <View>
@@ -73,7 +56,7 @@ export default function App() {
             </TouchableWithoutFeedback>
           ),
         }} />
-        <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ headerTitle: "Saved Favrioutes (1)", tabBarLabel: "Favorites", headerShown: true, headerTintColor: 'green' }} />
+        <Tab.Screen name="Favorites" component={Favorites} options={{ headerTitle: "Saved Favrioutes (1)", tabBarLabel: "Favorites", headerShown: true, headerTintColor: 'green' }} />
       </Tab.Navigator>
     </NavigationContainer>
 
