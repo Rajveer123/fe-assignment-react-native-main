@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,9 +19,25 @@ function FavoritesScreen() {
   );
 }
 
+function Home() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Characters" component={CharactersScreen} />
+      <Tab.Screen name="Favorites" component={FavoritesScreen} />
+    </Tab.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 
+const Badge = ({ badgeCount }) => (
+  <View style={styles.circle}>
+    <Text style={styles.count}>{badgeCount}</Text>
+  </View>
+);
+
 export default function App() {
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -42,9 +58,22 @@ export default function App() {
           },
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
+
         })}>
-        <Tab.Screen name="Characters" component={CharactersScreen} options={{ title: "All Characters (826)", tabBarLabel: "Characters" }} />
-        <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ title: "Saved Favrioutes (1)", tabBarLabel: "Favorites" }} />
+        <Tab.Screen name="Characters" component={CharactersScreen} options={{
+          headerTitle: "All Characters (826)", tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerRight: () => (
+            <TouchableWithoutFeedback onPress={() => alert('Open Filter Model Window')}>
+              <View>
+                <View style={styles.filterImageContainer}>
+                  <Image source={require('./assets/filter_icon.png')}
+                    style={{ width: 30, height: 30 }} />
+                </View>
+                <Badge badgeCount={2} />
+              </View>
+            </TouchableWithoutFeedback>
+          ),
+        }} />
+        <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ headerTitle: "Saved Favrioutes (1)", tabBarLabel: "Favorites", headerShown: true, headerTintColor: 'green' }} />
       </Tab.Navigator>
     </NavigationContainer>
 
@@ -58,4 +87,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  circle: {
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'red',
+    position: 'absolute',
+    marginTop: -10,
+    marginLeft: 30
+  },
+  count: {
+    color: '#FFF'
+  },
+  filterImageContainer: {
+    marginRight: 20,
+    borderColor: 'gray',
+    borderWidth: 1,
+    height: 50,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25
+  }
 });
