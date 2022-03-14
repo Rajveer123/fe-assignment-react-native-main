@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableWithoutFeedback } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Characters from './components/Views/Characters.js';
 import Favorites from './components/Views/Favorites.js';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,12 +15,7 @@ const Badge = ({ badgeCount }) => (
 );
 
 export default function App() {
-  const [state, setState] = useState({
-    loading: true,
-    randomUserData: [],
-    loadingExtraData: false,
-    page: 1
-  });
+
   return (
     <NavigationContainer>
       <Tab.Navigator
