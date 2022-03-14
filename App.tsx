@@ -15,7 +15,6 @@ const Badge = ({ badgeCount }) => (
 );
 
 export default function App() {
-
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -37,11 +36,13 @@ export default function App() {
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
 
+
         })}>
         <Tab.Screen name="Characters" component={Characters} options={{
-          headerTitle: "All Characters (826)", tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerRight: () => (
+          headerStatusBarHeight: 64,
+          headerTitle: 'All Characters ( 0 )', tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerRight: () => (
             <TouchableWithoutFeedback onPress={() => alert('Open Filter Model Window')}>
-              <View>
+              <View style={{ marginBottom: 20 }}>
                 <View style={styles.filterImageContainer}>
                   <Image source={require('./assets/filter_icon.png')}
                     style={{ width: 30, height: 30 }} />
