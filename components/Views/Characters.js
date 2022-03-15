@@ -19,7 +19,7 @@ export default function Characters() {
 
 
     //Method to Load Data
-    const loadCharactersData = () => {
+    const loadCharactersData = async () => {
         fetch("https://rickandmortyapi.com/api/character/?&page=" + currentPage)
             .then(response => response.json())
             .then(responseJson => {
@@ -28,9 +28,6 @@ export default function Characters() {
                     //Setting data into state
                     setData(data.concat(responseJson.results));
                 }
-
-
-
 
                 //Hiding Loading Indicator once data gets loaded
                 setIsLoading(false);
@@ -57,7 +54,7 @@ export default function Characters() {
         //Load Data
         loadCharactersData();
 
-    }, [])
+    }, [currentPage])
 
     return (
 
@@ -73,29 +70,11 @@ export default function Characters() {
                     ListFooterComponent={renderFooter}
                     onEndReached={loadMoreCharactersData}
                     initialNumToRender={4}
-                    //onEndReachedThreshold={0.1}
+                    onEndReachedThreshold={0.1}
                     ItemSeparatorComponent={() => <View style={{ height: 0.5, backgroundColor: 'black' }} />}
                 />
             </View>
-            {/*
-                isLoading ?
-                    (
-                        <LoadingIndicator color={'#fff'} />
-                    ) : (
-                        <View style={{ padding: 20 }}>
-                            <FlatList
-                                data={data}
-                                renderItem={this.renderCustomItem}
-                                style={{ width: 350, height: 800 }}
-                                keyExtractor={(item, index) => index.toString()}
-                                ListFooterComponent={this.renderFooter}
-                                onEndReached={this.loadMoreCharactersData}
-                                //onEndReachedThreshold={0.1}
-                                ItemSeparatorComponent={() => <View style={{ height: 0.5, backgroundColor: 'black' }} />}
-                            />
-                        </View>
-                    )
-            */}
+
 
         </View>
 
