@@ -7,10 +7,40 @@ const Item = (props) => {
     const onlineStatusColor = (props.character.status == 'Alive') ? "green" : 'red';
     const statusTitle = props.character.status + " - " + props.character.species;
     const rightImage = props.type == 'Add' ? require('../../assets/favorite_icon.png') : require('../../assets/delete_icon.png');
+    const containsObject = (obj, list) => {
+        var i;
+        for (i = 0; i < list.length; i++) {
+            if (list[i].id === obj.id) {
+                return true;
+            }
+        }
 
+        return false;
+    }
     const handleRightImageClick = () => {
         if (props.type == "Add") {
-            alert('Add Faviourite Item.');
+            var savedItemsData = [];
+            AsyncStorage.getItem('savedFavriouteData').then((value) => {
+                if (value == null || value == undefined || (value != null && typeof (value) == Array && value.length == 0)) {
+                    savedItemsData.push(props.character);
+                } else {
+                    savedItemsData = JSON.parse(value);
+                    //Checking if item already added as favrioute item
+                    if (!containsObject(props.character, savedItemsData)) {
+                        savedItemsData.push(props.character);
+                    } else {
+                        alert('Already Faviourite Item.');
+                        return;
+                    }
+
+                }
+                try {
+                    AsyncStorage.setItem('savedFavriouteData', JSON.stringify(savedItemsData));
+                    alert('Successfully saved.');
+                } catch (error) {
+                    console.log('There is an error while storing local storage :' + JSON.stringify(error));
+                }
+            });
 
         } else {
             alert('Handle Remove Faviourite Item.');
