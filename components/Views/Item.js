@@ -1,5 +1,8 @@
 import React, { Component, useCallback } from 'react';
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 const Item = (props) => {
     const onlineStatusColor = (props.character.status == 'Alive') ? "green" : 'red';
     const statusTitle = props.character.status + " - " + props.character.species;

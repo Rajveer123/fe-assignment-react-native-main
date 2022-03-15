@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Characters from './components/Views/Characters.js';
 import Favorites from './components/Views/Favorites.js';
 import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,6 +16,22 @@ const Badge = ({ badgeCount }) => (
 );
 
 export default function App() {
+  //Initialize the local storage data for saved favourite items
+  const savedFavriouteItems: React.DependencyList = [];
+  const setSavedData = () => {
+    AsyncStorage.getItem('savedFavriouteData').then((value) => {
+      if (value == null) {
+        try {
+          AsyncStorage.setItem('savedFavriouteData', JSON.stringify(savedFavriouteItems));
+        } catch (error) {
+          console.log('There is an error while storing local storage :' + JSON.stringify(error));
+        }
+      }
+    })
+  }
+  useEffect(() => {
+    setSavedData();
+  }, [])
   return (
     <NavigationContainer>
       <Tab.Navigator
