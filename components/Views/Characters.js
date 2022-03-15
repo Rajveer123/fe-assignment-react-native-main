@@ -58,7 +58,7 @@ export default function Characters() {
 
     return (
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
             <View style={{ padding: 20 }}>
                 <FlatList
                     data={data}
@@ -71,7 +71,7 @@ export default function Characters() {
                     onEndReached={loadMoreCharactersData}
                     initialNumToRender={4}
                     onEndReachedThreshold={0.1}
-                    ItemSeparatorComponent={() => <View style={{ height: 0.5, backgroundColor: 'black' }} />}
+                    ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                 />
             </View>
 
