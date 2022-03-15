@@ -1,9 +1,18 @@
-import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import React, { Component, useCallback } from 'react';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 const Item = (props) => {
     const onlineStatusColor = (props.character.status == 'Alive') ? "green" : 'red';
     const statusTitle = props.character.status + " - " + props.character.species;
+    const rightImage = props.type == 'Add' ? require('../../assets/favorite_icon.png') : require('../../assets/delete_icon.png');
 
+    const handleRightImageClick = () => {
+        if (props.type == "Add") {
+            alert('Add Faviourite Item.');
+
+        } else {
+            alert('Handle Remove Faviourite Item.');
+        }
+    }
     return (
 
         <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'rgb(242, 242, 242)', borderRadius: 10 }}>
@@ -19,15 +28,21 @@ const Item = (props) => {
                 <Text style={{ marginTop: 15, fontSize: 16 }}>Last know location:</Text>
                 <Text style={{ fontWeight: '600', fontSize: 16 }}>{props.character.location.name}</Text>
             </View>
-            <View style={{
-                backgroundColor: 'white', flex: 1.2,
-                height: 60, width: 60, alignSelf: 'flex-start',
-                borderRadius: 30, alignSelf: 'flex-start',
-                justifyContent: 'center',
-                alignItems: 'center', marginTop: 10, marginRight: 10
-            }}>
-                <Image style={{ height: 40, width: 40, overflow: 'hidden' }} source={require('../../assets/favorite_icon.png')} />
-            </View>
+
+            <TouchableWithoutFeedback onPress={handleRightImageClick}>
+
+                <View style={{
+                    backgroundColor: 'white', flex: 1.2,
+                    height: 60, width: 60, alignSelf: 'flex-start',
+                    borderRadius: 30, alignSelf: 'flex-start',
+                    justifyContent: 'center',
+                    alignItems: 'center', marginTop: 10, marginRight: 10
+                }}>
+                    <Image style={{ height: 40, width: 40, overflow: 'hidden' }} source={rightImage} />
+
+                </View>
+            </TouchableWithoutFeedback>
+
         </View >
     );
 };

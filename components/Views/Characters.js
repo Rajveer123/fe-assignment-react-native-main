@@ -63,7 +63,7 @@ export default function Characters() {
                 <FlatList
                     data={data}
                     renderItem={({ item }) =>
-                        <Item character={item} />
+                        <Item character={item} type="Add" />
                     }
                     style={{ width: 350, height: 800 }}
                     keyExtractor={(item, index) => index.toString()}
