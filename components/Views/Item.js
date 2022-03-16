@@ -18,9 +18,10 @@ const Item = (props) => {
         return false;
     }
     const handleRightImageClick = () => {
-        if (props.type == "Add") {
-            var savedItemsData = [];
-            AsyncStorage.getItem('savedFavriouteData').then((value) => {
+
+        var savedItemsData = [];
+        AsyncStorage.getItem('savedFavriouteData').then((value) => {
+            if (props.type == "Add") {
                 if (value == null || value == undefined || (value != null && typeof (value) == Array && value.length == 0)) {
                     savedItemsData.push(props.character);
                 } else {
@@ -32,20 +33,29 @@ const Item = (props) => {
                         alert('Already Faviourite Item.');
                         return;
                     }
-
-                }
-                try {
-                    AsyncStorage.setItem('savedFavriouteData', JSON.stringify(savedItemsData));
                     alert('Successfully saved.');
-                } catch (error) {
-                    console.log('There is an error while storing local storage :' + JSON.stringify(error));
                 }
-            });
 
-        } else {
-            alert('Handle Remove Faviourite Item.');
-        }
+            } else {
+                if (value != null && JSON.parse(value).length > 0) {
+                    savedItemsData = JSON.parse(value);
+                    //Perform delete operation
+                    savedItemsData = savedItemsData.filter(item => item.id !== props.character.id);
+                    alert('Faviourite Item Removed Successfully.');
+
+                }
+
+            }
+            try {
+                AsyncStorage.setItem('savedFavriouteData', JSON.stringify(savedItemsData));
+
+            } catch (error) {
+                console.log('There is an error while storing local storage :' + JSON.stringify(error));
+            }
+        });
+
     }
+
     return (
 
         <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'rgb(242, 242, 242)', borderRadius: 10 }}>
@@ -77,7 +87,8 @@ const Item = (props) => {
             </TouchableWithoutFeedback>
 
         </View >
-    );
+    )
 };
+
 
 export default Item;
