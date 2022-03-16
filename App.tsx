@@ -16,6 +16,8 @@ const Badge = ({ badgeCount }) => (
 );
 
 export default function App() {
+  const [charactersTabHeaderTitle, setCharactersTabHeaderTitle] = useState("All Characters ( 0 )");
+  const [favouriteTabHeaderTitle, setFavouriteTabHeaderTitle] = useState("Saved Favrioutes (1)");
   //Initialize the local storage data for saved favourite items
   const savedFavriouteItems: React.DependencyList = [];
   const setSavedData = () => {
@@ -32,6 +34,15 @@ export default function App() {
   useEffect(() => {
     setSavedData();
   }, [])
+  //Update title header name based on data we got after paggination 
+  const updateCharacterTabTitle = React.useCallback((updatedharacterTabTitle) => {
+    setCharactersTabHeaderTitle(updatedharacterTabTitle);
+  }, []);
+
+  const updateFavouriteTabTitle = React.useCallback((updatedFavouriteTabTitle) => {
+    setFavouriteTabHeaderTitle(updatedFavouriteTabTitle);
+  }, []);
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -55,21 +66,24 @@ export default function App() {
 
 
         })}>
-        <Tab.Screen name="Characters" component={Characters} options={{
-          headerStatusBarHeight: 64,
-          headerTitle: 'All Characters ( 0 )', tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerRight: () => (
-            <TouchableWithoutFeedback onPress={() => alert('Open Filter Model Window')}>
-              <View style={{ marginBottom: 20 }}>
-                <View style={styles.filterImageContainer}>
-                  <Image source={require('./assets/filter_icon.png')}
-                    style={{ width: 30, height: 30 }} />
+        <Tab.Screen name="Characters"
+          children={() => <Characters updateHeaderTitle={updateCharacterTabTitle} />}
+          options={{
+            headerStatusBarHeight: 64,
+            headerTitle: charactersTabHeaderTitle, tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerTitleAlign: 'left', headerRight: () => (
+              <TouchableWithoutFeedback onPress={() => alert('Open Filter Model Window')}>
+                <View style={{ marginBottom: 20 }}>
+                  <View style={styles.filterImageContainer}>
+                    <Image source={require('./assets/filter_icon.png')}
+                      style={{ width: 30, height: 30 }} />
+                  </View>
+                  <Badge badgeCount={2} />
                 </View>
-                <Badge badgeCount={2} />
-              </View>
-            </TouchableWithoutFeedback>
-          ),
-        }} />
-        <Tab.Screen name="Favorites" component={Favorites} options={{ headerTitle: "Saved Favrioutes (1)", tabBarLabel: "Favorites", headerShown: true, headerTintColor: 'green' }} />
+              </TouchableWithoutFeedback>
+            ),
+          }} />
+        <Tab.Screen name="Favorites" component={Favorites}
+          options={{ headerTitle: favouriteTabHeaderTitle, tabBarLabel: "Favorites", headerShown: true, headerTitleAlign: 'left', headerTintColor: 'green' }} />
       </Tab.Navigator>
     </NavigationContainer>
 

@@ -39,6 +39,9 @@ export default function Favorites({ navigation }) {
     //here I'm trying to refresh (example from docs)
     const onRefresh = React.useCallback((updatedSavedItemsData) => {
         setSavedData(updatedSavedItemsData);
+        if (props.updateHeaderTitle != null) {
+            props.updateHeaderTitle("Saved Favrioutes (" + savedData.length + ")");
+        }
     });
 
     return (

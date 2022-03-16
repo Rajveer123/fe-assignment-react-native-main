@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import LoadingIndicator from './LoadingIndicator.js';
 import Item from './Item.js';
 
-export default function Characters() {
+export default function Characters(props) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -15,9 +15,6 @@ export default function Characters() {
         loadCharactersData();
     }
 
-
-
-
     //Method to Load Data
     const loadCharactersData = async () => {
         fetch("https://rickandmortyapi.com/api/character/?&page=" + currentPage)
@@ -28,7 +25,9 @@ export default function Characters() {
                     //Setting data into state
                     setData(data.concat(responseJson.results));
                 }
-
+                if (props.updateHeaderTitle != null) {
+                    props.updateHeaderTitle("All Characters (" + data.length + ")");
+                }
                 //Hiding Loading Indicator once data gets loaded
                 setIsLoading(false);
 
