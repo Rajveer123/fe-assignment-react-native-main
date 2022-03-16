@@ -11,8 +11,8 @@ export default function Favorites({ navigation }) {
     useEffect(() => {
         setIsLoading(true);
         const unsubscribe = navigation.addListener('focus', () => {
-            let savedFavriouteItems = [];
             const getSavedData = () => {
+                let savedFavriouteItems = [];
                 AsyncStorage.getItem('savedFavriouteData').then((value) => {
                     if (value == null) {
                         try {
@@ -35,6 +35,12 @@ export default function Favorites({ navigation }) {
             return unsubscribe;
         });
     }, [navigation])
+
+    //here I'm trying to refresh (example from docs)
+    const onRefresh = React.useCallback((updatedSavedItemsData) => {
+        setSavedData(updatedSavedItemsData);
+    });
+
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
             {isLoading ? <LoadingIndicator /> :
@@ -43,7 +49,7 @@ export default function Favorites({ navigation }) {
                         <FlatList
                             data={savedData}
                             renderItem={({ item }) =>
-                                <Item character={item} type="Delete" />}
+                                <Item character={item} type="Delete" onRefresh={onRefresh} />}
                             style={{ width: 350, height: 800 }}
                             keyExtractor={(item, index) => index.toString()}
                             initialNumToRender={4}

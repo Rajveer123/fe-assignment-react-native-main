@@ -1,4 +1,4 @@
-import React, { Component, useCallback } from 'react';
+import React, { Component, useCallback, useEffect } from 'react';
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -17,6 +17,7 @@ const Item = (props) => {
         }
         return false;
     }
+
     const handleRightImageClick = () => {
 
         var savedItemsData = [];
@@ -42,13 +43,13 @@ const Item = (props) => {
                     //Perform delete operation
                     savedItemsData = savedItemsData.filter(item => item.id !== props.character.id);
                     alert('Faviourite Item Removed Successfully.');
-
                 }
 
             }
             try {
                 AsyncStorage.setItem('savedFavriouteData', JSON.stringify(savedItemsData));
-
+                //Reload Faviourite Page again after removing item
+                props.onRefresh != null && props.onRefresh(savedItemsData);
             } catch (error) {
                 console.log('There is an error while storing local storage :' + JSON.stringify(error));
             }
