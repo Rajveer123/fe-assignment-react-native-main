@@ -7,14 +7,14 @@ const Item = (props) => {
     const onlineStatusColor = (props.character.status == 'Alive') ? "green" : 'red';
     const statusTitle = props.character.status + " - " + props.character.species;
     const rightImage = props.type == 'Add' ? require('../../assets/favorite_icon.png') : require('../../assets/delete_icon.png');
-    const containsObject = (obj, list) => {
+    //Below Method will check item is already added or not in Array
+    const alreadyContainsFavItem = (obj, list) => {
         var i;
         for (i = 0; i < list.length; i++) {
             if (list[i].id === obj.id) {
                 return true;
             }
         }
-
         return false;
     }
     const handleRightImageClick = () => {
@@ -26,7 +26,7 @@ const Item = (props) => {
                 } else {
                     savedItemsData = JSON.parse(value);
                     //Checking if item already added as favrioute item
-                    if (!containsObject(props.character, savedItemsData)) {
+                    if (!alreadyContainsFavItem(props.character, savedItemsData)) {
                         savedItemsData.push(props.character);
                     } else {
                         alert('Already Faviourite Item.');
