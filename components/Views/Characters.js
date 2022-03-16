@@ -26,7 +26,7 @@ export default function Characters(props) {
                     setData(data.concat(responseJson.results));
                 }
                 if (props.updateHeaderTitle != null) {
-                    props.updateHeaderTitle("All Characters (" + data.length + ")");
+                    props.updateHeaderTitle("All Characters (" + (responseJson.info.count) + ")");
                 }
                 //Hiding Loading Indicator once data gets loaded
                 setIsLoading(false);

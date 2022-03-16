@@ -82,7 +82,8 @@ export default function App() {
               </TouchableWithoutFeedback>
             ),
           }} />
-        <Tab.Screen name="Favorites" component={Favorites}
+        <Tab.Screen name="Favorites"
+          children={({ navigation }) => <Favorites updateHeaderTitle={updateFavouriteTabTitle} navigation={navigation} />}
           options={{ headerTitle: favouriteTabHeaderTitle, tabBarLabel: "Favorites", headerShown: true, headerTitleAlign: 'left', headerTintColor: 'green' }} />
       </Tab.Navigator>
     </NavigationContainer>

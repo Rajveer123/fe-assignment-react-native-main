@@ -3,7 +3,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import LoadingIndicator from './LoadingIndicator.js';
 import Item from './Item.js';
-export default function Favorites({ navigation }) {
+export default function Favorites({ navigation, updateHeaderTitle }) {
+
 
     const [isLoading, setIsLoading] = useState(false);
     const [savedData, setSavedData] = useState([]);
@@ -24,6 +25,9 @@ export default function Favorites({ navigation }) {
                         savedFavriouteItems = JSON.parse(value);
                         setSavedData(savedFavriouteItems);
                     }
+                    if (updateHeaderTitle != null && typeof (updateHeaderTitle) === 'function') {
+                        updateHeaderTitle("Saved Favrioutes (" + savedFavriouteItems.length + ")");
+                    }
                     setIsLoading(false);
                 })
             }
@@ -39,8 +43,8 @@ export default function Favorites({ navigation }) {
     //here I'm trying to refresh (example from docs)
     const onRefresh = React.useCallback((updatedSavedItemsData) => {
         setSavedData(updatedSavedItemsData);
-        if (props.updateHeaderTitle != null) {
-            props.updateHeaderTitle("Saved Favrioutes (" + savedData.length + ")");
+        if (updateHeaderTitle != null && typeof (updateHeaderTitle) === 'function') {
+            updateHeaderTitle("Saved Favrioutes (" + updatedSavedItemsData.length + ")");
         }
     });
 
