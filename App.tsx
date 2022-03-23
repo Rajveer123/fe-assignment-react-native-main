@@ -30,8 +30,8 @@ const Badge = ({ badgeCount }) => {
 
 export default function App() {
   const [filterPageBadgeCount, setFilterPageBadgeCount] = useState(0);
-  const [charactersTabHeaderTitle, setCharactersTabHeaderTitle] = useState("All Characters ( 0 )");
-  const [favouriteTabHeaderTitle, setFavouriteTabHeaderTitle] = useState("Saved Favrioutes (1)");
+  const [charactersTabHeaderTitle, setCharactersTabHeaderTitle] = useState("All Characters");
+  const [favouriteTabHeaderTitle, setFavouriteTabHeaderTitle] = useState("Saved Favrioutes");
   //Initialize the local storage data for saved favourite items
   const savedFavriouteItems: React.DependencyList = [];
   const setSavedData = () => {

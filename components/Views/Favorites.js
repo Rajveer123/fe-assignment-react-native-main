@@ -27,7 +27,11 @@ export default function Favorites({ navigation, updateHeaderTitle }) {
                         setSavedData(savedFavriouteItems);
                     }
                     if (updateHeaderTitle != null && typeof (updateHeaderTitle) === 'function') {
-                        updateHeaderTitle("Saved Favrioutes (" + savedFavriouteItems.length + ")");
+                        if (savedFavriouteItems.length > 0) {
+                            updateHeaderTitle("Saved Favrioutes (" + savedFavriouteItems.length + ")");
+                        } else {
+                            updateHeaderTitle("Saved Favrioutes");
+                        }
                     }
                     setIsLoading(false);
                 })
@@ -45,7 +49,12 @@ export default function Favorites({ navigation, updateHeaderTitle }) {
     const onRefresh = React.useCallback((updatedSavedItemsData) => {
         setSavedData(updatedSavedItemsData);
         if (updateHeaderTitle != null && typeof (updateHeaderTitle) === 'function') {
-            updateHeaderTitle("Saved Favrioutes (" + updatedSavedItemsData.length + ")");
+            if (updatedSavedItemsData.length > 0) {
+                updateHeaderTitle("Saved Favrioutes (" + updatedSavedItemsData.length + ")");
+            } else {
+                updateHeaderTitle("Saved Favrioutes");
+            }
+
         }
     });
     //Method to show / hide Toast Message
