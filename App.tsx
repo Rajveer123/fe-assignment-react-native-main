@@ -7,6 +7,7 @@ import Favorites from './components/Views/Favorites.js';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 const Tab = createBottomTabNavigator();
 
 const Badge = ({ badgeCount }) => (
@@ -44,6 +45,7 @@ export default function App() {
   }, []);
 
   return (
+
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -87,6 +89,7 @@ export default function App() {
           options={{ headerTitle: favouriteTabHeaderTitle, tabBarLabel: "Favorites", headerShown: true, headerTitleAlign: 'left', headerTintColor: 'green' }} />
       </Tab.Navigator>
     </NavigationContainer>
+
 
   );
 }

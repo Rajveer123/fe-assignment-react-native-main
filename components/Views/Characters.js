@@ -1,12 +1,17 @@
 import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import LoadingIndicator from './LoadingIndicator.js';
+import TostMessage from './TostMessage.js';
 import Item from './Item.js';
 
+
 export default function Characters(props) {
+
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [toastMessage, setToastMessage] = useState('Saved Successfully');
+    const [toastMessageType, setToastMessageType] = useState('Info');
+    const [showTostMessage, setShowTostMessage] = useState(false);
 
     //Load More Data on scroll end
     const loadMoreCharactersData = () => {
@@ -58,7 +63,7 @@ export default function Characters(props) {
     return (
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-            <View style={{ padding: 20 }}>
+            <View style={{ flex: 1, padding: 20 }}>
                 <FlatList
                     data={data}
                     renderItem={({ item }) =>
@@ -72,9 +77,8 @@ export default function Characters(props) {
                     onEndReachedThreshold={0.1}
                     ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                 />
+                <TostMessage type={toastMessageType} message={toastMessage} isVisible={showTostMessage} />
             </View>
-
-
         </View>
 
     )

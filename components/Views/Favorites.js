@@ -63,6 +63,7 @@ export default function Favorites({ navigation, updateHeaderTitle }) {
                             ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                         /> : <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>No favourite item saved yet.</Text>}
                 </View>}
+
         </View>
     )
 }
