@@ -9,6 +9,7 @@ export default function Characters(props) {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    //Tost Message Related States
     const [toastMessage, setToastMessage] = useState('Saved Successfully');
     const [toastMessageType, setToastMessageType] = useState('Info');
     const [showTostMessage, setShowTostMessage] = useState(false);
@@ -59,6 +60,18 @@ export default function Characters(props) {
         loadCharactersData();
 
     }, [currentPage])
+    //Method to show / hide Toast Message
+    const handleToastMessage = React.useCallback((message, type) => {
+        setToastMessage(message);
+        setToastMessageType(type);
+        setShowTostMessage(true);
+
+        var toastMessagetimeOut = setTimeout(function () {
+            setShowTostMessage(false);
+            clearTimeout(toastMessagetimeOut);
+            toastMessagetimeOut = null;
+        }, 1000);
+    });
 
     return (
 
@@ -67,7 +80,7 @@ export default function Characters(props) {
                 <FlatList
                     data={data}
                     renderItem={({ item }) =>
-                        <Item character={item} type="Add" />
+                        <Item character={item} type="Add" handleToastMessage={handleToastMessage} />
                     }
                     style={{ width: 350, height: 800 }}
                     keyExtractor={(item, index) => index.toString()}
@@ -77,7 +90,7 @@ export default function Characters(props) {
                     onEndReachedThreshold={0.1}
                     ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                 />
-                <TostMessage type={toastMessageType} message={toastMessage} isVisible={showTostMessage} />
+                <TostMessage type={toastMessageType} message={toastMessage} isTostMessageVisible={showTostMessage} />
             </View>
         </View>
 

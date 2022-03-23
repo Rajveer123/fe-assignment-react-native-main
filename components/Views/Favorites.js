@@ -2,12 +2,13 @@ import { View, Text, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import LoadingIndicator from './LoadingIndicator.js';
+import TostMessage from './TostMessage.js';
 import Item from './Item.js';
 export default function Favorites({ navigation, updateHeaderTitle }) {
-
-
     const [isLoading, setIsLoading] = useState(false);
     const [savedData, setSavedData] = useState([]);
+    //Tost Message Related States
+    const [showTostMessage, setShowTostMessage] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -47,7 +48,15 @@ export default function Favorites({ navigation, updateHeaderTitle }) {
             updateHeaderTitle("Saved Favrioutes (" + updatedSavedItemsData.length + ")");
         }
     });
-
+    //Method to show / hide Toast Message
+    const handleToastMessage = React.useCallback((message, type) => {
+        setShowTostMessage(true);
+        var toastMessagetimeOut = setTimeout(function () {
+            setShowTostMessage(false);
+            clearTimeout(toastMessagetimeOut);
+            toastMessagetimeOut = null;
+        }, 1000);
+    });
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
             {isLoading ? <LoadingIndicator /> :
@@ -56,12 +65,13 @@ export default function Favorites({ navigation, updateHeaderTitle }) {
                         <FlatList
                             data={savedData}
                             renderItem={({ item }) =>
-                                <Item character={item} type="Delete" onRefresh={onRefresh} />}
+                                <Item character={item} type="Delete" onRefresh={onRefresh} handleToastMessage={handleToastMessage} />}
                             style={{ width: 350, height: 800 }}
                             keyExtractor={(item, index) => index.toString()}
                             initialNumToRender={4}
                             ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                         /> : <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>No favourite item saved yet.</Text>}
+                    <TostMessage type='info' message='Item Removed Successfully.' isTostMessageVisible={showTostMessage} />
                 </View>}
 
         </View>

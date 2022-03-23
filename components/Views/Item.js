@@ -31,11 +31,11 @@ const Item = (props) => {
                     if (!alreadyContainsFavItem(props.character, savedItemsData)) {
                         savedItemsData.push(props.character);
                     } else {
-                        alert('Already Faviourite Item.');
+                        //Showing toast message after removing item
+                        props.handleToastMessage != null && props.handleToastMessage('Already Faviourite Item.', 'error');
                         return;
                     }
-                    alert('Successfully saved.');
-
+                    props.handleToastMessage != null && props.handleToastMessage('Successfully saved.', 'info');
                 }
 
             } else {
@@ -43,8 +43,7 @@ const Item = (props) => {
                     savedItemsData = JSON.parse(value);
                     //Perform delete operation
                     savedItemsData = savedItemsData.filter(item => item.id !== props.character.id);
-                    alert('Faviourite Item Removed Successfully.');
-
+                    props.handleToastMessage != null && props.handleToastMessage('Faviourite Item Removed Successfully.', 'info');
                 }
 
             }
