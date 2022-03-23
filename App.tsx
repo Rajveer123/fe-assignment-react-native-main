@@ -10,13 +10,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
-const Badge = ({ badgeCount }) => (
-  <View style={styles.circle}>
-    <Text style={styles.count}>{badgeCount}</Text>
-  </View>
-);
+const Badge = ({ badgeCount }) => {
+  //Showing badge count if count>0 only
+  if (badgeCount > 0) {
+    return (
+      <View style={styles.circle}>
+        <Text style={styles.count}>{badgeCount}</Text>
+      </View>
+    )
+  } else {
+    return null;
+  }
+}
+
+
+
+
+
 
 export default function App() {
+  const [filterPageBadgeCount, setFilterPageBadgeCount] = useState(0);
   const [charactersTabHeaderTitle, setCharactersTabHeaderTitle] = useState("All Characters ( 0 )");
   const [favouriteTabHeaderTitle, setFavouriteTabHeaderTitle] = useState("Saved Favrioutes (1)");
   //Initialize the local storage data for saved favourite items
@@ -79,7 +92,7 @@ export default function App() {
                     <Image source={require('./assets/filter_icon.png')}
                       style={{ width: 30, height: 30 }} />
                   </View>
-                  <Badge badgeCount={2} />
+                  <Badge badgeCount={filterPageBadgeCount} />
                 </View>
               </TouchableWithoutFeedback>
             ),
