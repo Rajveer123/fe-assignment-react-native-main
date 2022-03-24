@@ -1,10 +1,12 @@
 import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import TostMessage from './TostMessage.js';
+import FilterPage from './FilterPage.js';
 import Item from './Item.js';
 
 
-export default function Characters(props) {
+
+function Characters(props, ref) {
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +15,15 @@ export default function Characters(props) {
     const [toastMessage, setToastMessage] = useState('Saved Successfully');
     const [toastMessageType, setToastMessageType] = useState('Info');
     const [showTostMessage, setShowTostMessage] = useState(false);
+    //Filter Page Related States
+    const [showFilterPage, setShowFilterPage] = useState(false);
+
+    useImperativeHandle(ref, () => ({
+        // Open Filter Page Popup Window
+        openFilterPagePopWindow: () => {
+            setShowFilterPage(true)
+        }
+    }))
 
     //Load More Data on scroll end
     const loadMoreCharactersData = () => {
@@ -53,6 +64,8 @@ export default function Characters(props) {
         )
     }
 
+
+
     useEffect(() => {
         //Showing Activity Indicator while List is Loading Data
         setIsLoading(true);
@@ -91,8 +104,10 @@ export default function Characters(props) {
                     ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                 />
                 <TostMessage type={toastMessageType} message={toastMessage} isTostMessageVisible={showTostMessage} />
+                <FilterPage isFilterPageVisible={showFilterPage} />
             </View>
         </View>
 
     )
 }
+export default forwardRef(Characters);

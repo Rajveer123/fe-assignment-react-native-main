@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Characters from './components/Views/Characters.js';
 import Favorites from './components/Views/Favorites.js';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -29,11 +29,13 @@ const Badge = ({ badgeCount }) => {
 
 
 export default function App() {
+  //Filter Page Related States
   const [filterPageBadgeCount, setFilterPageBadgeCount] = useState(0);
   const [charactersTabHeaderTitle, setCharactersTabHeaderTitle] = useState("All Characters");
   const [favouriteTabHeaderTitle, setFavouriteTabHeaderTitle] = useState("Saved Favrioutes");
   //Initialize the local storage data for saved favourite items
   const savedFavriouteItems: React.DependencyList = [];
+  const childRef = useRef();
   const setSavedData = () => {
     AsyncStorage.getItem('savedFavriouteData').then((value) => {
       if (value == null) {
@@ -56,6 +58,10 @@ export default function App() {
   const updateFavouriteTabTitle = React.useCallback((updatedFavouriteTabTitle) => {
     setFavouriteTabHeaderTitle(updatedFavouriteTabTitle);
   }, []);
+
+  const HandleFilterPage = () => {
+    childRef.current.openFilterPagePopWindow()
+  }
 
   return (
 
@@ -82,11 +88,11 @@ export default function App() {
 
         })}>
         <Tab.Screen name="Characters"
-          children={() => <Characters updateHeaderTitle={updateCharacterTabTitle} />}
+          children={() => <Characters ref={childRef} updateHeaderTitle={updateCharacterTabTitle} />}
           options={{
             headerStatusBarHeight: 64,
             headerTitle: charactersTabHeaderTitle, tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerTitleAlign: 'left', headerRight: () => (
-              <TouchableWithoutFeedback onPress={() => alert('Open Filter Model Window')}>
+              <TouchableWithoutFeedback onPress={HandleFilterPage}>
                 <View style={{ marginBottom: 20 }}>
                   <View style={styles.filterImageContainer}>
                     <Image source={require('./assets/filter_icon.png')}
