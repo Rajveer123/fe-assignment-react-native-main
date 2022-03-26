@@ -1,10 +1,17 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 import LoadingIndicator from './LoadingIndicator.js';
 import TostMessage from './TostMessage.js';
 import Item from './Item.js';
 export default function Favorites({ navigation, updateHeaderTitle }) {
+    const [windowWidth, setWindowWidth] = useState(Dimensions.get('window').width);
+    const [windowHeight, setWindowHeight] = useState(Dimensions.get('window').height);
+    //Handle Screen Orientation
+    Dimensions.addEventListener('change', () => {
+        setWindowWidth(Dimensions.get('window').width);
+        setWindowHeight(Dimensions.get('window').height);
+    });
     const [isLoading, setIsLoading] = useState(false);
     const [savedData, setSavedData] = useState([]);
     //Tost Message Related States
@@ -67,19 +74,25 @@ export default function Favorites({ navigation, updateHeaderTitle }) {
         }, 1000);
     });
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-            {isLoading ? <LoadingIndicator /> :
-                <View style={{ padding: 20 }}>
+        <View style={{ flex: 1, backgroundColor: 'white', width: windowWidth, height: windowHeight }}>
+            {isLoading ?
+                <View style={{ display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <LoadingIndicator />
+                </View> :
+                <View style={{ display: 'flex', flex: 1 }}>
                     {savedData.length > 0 ?
                         <FlatList
                             data={savedData}
                             renderItem={({ item }) =>
                                 <Item character={item} type="Delete" onRefresh={onRefresh} handleToastMessage={handleToastMessage} />}
-                            style={{ width: 350, height: 800 }}
+                            style={{ display: 'flex', flex: 1, padding: 20 }}
                             keyExtractor={(item, index) => index.toString()}
                             initialNumToRender={4}
                             ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
-                        /> : <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>No favourite item saved yet.</Text>}
+                        /> :
+                        <View style={{ justifyContent: 'center', alignItems: 'center', display: 'flex', flex: 1 }}>
+                            <Text style={{ alignSelf: 'center', fontSize: 20, fontWeight: 'bold' }}>No favourite item saved yet.</Text>
+                        </View>}
                     <TostMessage type='info' message='Item Removed Successfully.' isTostMessageVisible={showTostMessage} />
                 </View>}
 

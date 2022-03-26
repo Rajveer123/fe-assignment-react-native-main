@@ -60,10 +60,10 @@ const Item = (props) => {
 
     return (
         <View style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'rgb(242, 242, 242)', borderRadius: 10 }}>
-            <View style={{ alignItems: 'center', justifyContent: 'center', flex: 2, padding: 10 }}>
-                <Image source={{ uri: props.character.image }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+            <View style={{ alignItems: 'flex-start', justifyContent: 'flex-start', marginTop: 20 }}>
+                <Image source={{ uri: props.character.image }} style={{ width: 100, height: 100, borderRadius: 50, marginLeft: 15 }} />
             </View>
-            <View style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column', backgroundColor: 'transparent', flex: 3, marginTop: 20, marginBottom: 20, marginLeft: 10 }}>
+            <View style={{ justifyContent: 'center', alignItems: 'flex-start', display: 'flex', flexDirection: 'column', backgroundColor: 'transparent', marginTop: 25, marginLeft: 15, marginRight: 15, marginBottom: 20, flex: 1 }}>
                 <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{props.character.name}</Text>
                 <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                     <View style={{ marginTop: 5, height: 15, width: 15, borderRadius: 7.5, backgroundColor: onlineStatusColor }} />
@@ -72,17 +72,19 @@ const Item = (props) => {
                 <Text style={{ marginTop: 15, fontSize: 16 }}>Last know location:</Text>
                 <Text style={{ fontWeight: '600', fontSize: 16 }}>{props.character.location.name}</Text>
             </View>
-            <TouchableWithoutFeedback onPress={handleRightImageClick}>
-                <View style={{
-                    backgroundColor: 'white', flex: 1.2,
-                    height: 60, width: 60, alignSelf: 'flex-start',
-                    borderRadius: 30, alignSelf: 'flex-start',
-                    justifyContent: 'center',
-                    alignItems: 'center', marginTop: 10, marginRight: 10
-                }}>
-                    <Image style={{ height: 40, width: 40, overflow: 'hidden' }} source={rightImage} />
-                </View>
-            </TouchableWithoutFeedback>
+            <View>
+                <TouchableWithoutFeedback onPress={handleRightImageClick}>
+                    <View style={{
+                        backgroundColor: 'white',
+                        height: 50, width: 50,
+                        borderRadius: 25, alignSelf: 'flex-end',
+                        justifyContent: 'center',
+                        alignItems: 'center', marginTop: 10, marginRight: 15
+                    }}>
+                        <Image style={{ height: 40, width: 40, overflow: 'hidden' }} source={rightImage} />
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
         </View >
 
     )

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import TostMessage from './TostMessage.js';
 import FilterPage from './FilterPage.js';
@@ -7,7 +7,13 @@ import Item from './Item.js';
 
 
 function Characters(props, ref) {
-
+    const [windowWidth, setWindowWidth] = useState(Dimensions.get('window').width);
+    const [windowHeight, setWindowHeight] = useState(Dimensions.get('window').height);
+    //Handle Screen Orientation
+    Dimensions.addEventListener('change', () => {
+        setWindowWidth(Dimensions.get('window').width);
+        setWindowHeight(Dimensions.get('window').height);
+    });
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -88,14 +94,14 @@ function Characters(props, ref) {
 
     return (
 
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
-            <View style={{ flex: 1, padding: 20 }}>
+        <View style={{ display: 'flex', flex: 1, backgroundColor: 'white', width: windowWidth, height: windowHeight }}>
+            <View style={{ display: 'flex', flex: 1 }}>
                 <FlatList
                     data={data}
                     renderItem={({ item }) =>
                         <Item character={item} type="Add" handleToastMessage={handleToastMessage} />
                     }
-                    style={{ width: 350, height: 800 }}
+                    style={{ display: 'flex', flex: 1, padding: 20 }}
                     keyExtractor={(item, index) => index.toString()}
                     ListFooterComponent={renderFooter}
                     onEndReached={loadMoreCharactersData}
