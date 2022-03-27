@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Dimensions, ActivityIndicator, Alert } from 'react-native';
 import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import TostMessage from './TostMessage.js';
 import FilterPage from './FilterPage.js';
@@ -7,6 +7,7 @@ import Item from './Item.js';
 
 
 function Characters(props, ref) {
+    let comeAfterResetingFilter = false;
     const [windowWidth, setWindowWidth] = useState(Dimensions.get('window').width);
     const [windowHeight, setWindowHeight] = useState(Dimensions.get('window').height);
     //Handle Screen Orientation
@@ -61,12 +62,22 @@ function Characters(props, ref) {
                 if (responseJson != null && responseJson.results != null && responseJson.results.length > 0) {
                     //Setting data into state
                     //setData(data.concat(responseJson.results));
+
                     if (filterPageQueryString != null && filterPageQueryString.length > 0 && loadMoreAPI == null) {
-                        //come from filter
+
+                        //come from filter so only setting filter response data
                         setData(responseJson.results);
+
                     } else {
-                        //loading without filter data
-                        setData(responseJson.results.concat(data));
+                        if (comeAfterResetingFilter) {
+                            //Here we are eliminating last filter data while setting new data for list
+                            setData(responseJson.results.concat([]));
+                            comeAfterResetingFilter = false;
+                        } else {
+                            //loading without filter data so concating with existing data to new data via API response
+                            setData(responseJson.results.concat(data));
+                        }
+
                     }
 
 
@@ -135,7 +146,9 @@ function Characters(props, ref) {
             filterQueryString = filterQueryString.substring(1);
             //Load Charater Data along with filter query string
             loadCharactersData(null, filterQueryString);
+
         } else {
+            comeAfterResetingFilter = true;
             //Load Charater Data
             loadCharactersData();
         }
