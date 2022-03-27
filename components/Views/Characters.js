@@ -16,7 +16,7 @@ function Characters(props, ref) {
     });
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     //Tost Message Related States
     const [toastMessage, setToastMessage] = useState('Saved Successfully');
     const [toastMessageType, setToastMessageType] = useState('Info');
@@ -25,6 +25,8 @@ function Characters(props, ref) {
     const [showFilterPage, setShowFilterPage] = useState(false);
     const [filterPageStatusData, setFilterPageStatusData] = useState([]);
     const [filterPageGenderData, setFilterPageGenderData] = useState([]);
+    const [filterPageQueryString, setFilterPageQueryString] = useState('');
+    const [loadMoreAPIURL, setLoadMoreAPIURL] = useState('');
 
     //Handle Child view click from Parent 
     useImperativeHandle(ref, () => ({
@@ -36,24 +38,32 @@ function Characters(props, ref) {
 
     //Load More Data on scroll end
     const loadMoreCharactersData = () => {
-        setCurrentPage(currentPage + 1);
-        setIsLoading(true);
-        loadCharactersData();
+        if (loadMoreAPIURL != null) {
+            setIsLoading(true);
+            loadCharactersData(loadMoreAPIURL);
+        }
     }
 
     //Method to Load Character Data
-    const loadCharactersData = async () => {
-        fetch("https://rickandmortyapi.com/api/character/?&page=" + currentPage)
+    const loadCharactersData = async (loadMoreAPI = null) => {
+        const apiURL = loadMoreAPI != null ? loadMoreAPI : "https://rickandmortyapi.com/api/character/?&page=" + currentPage;
+        fetch(apiURL)
             .then(response => response.json())
             .then(responseJson => {
+
+                if (responseJson != null && responseJson.info != null) {
+                    if (props.updateHeaderTitle != null) {
+                        props.updateHeaderTitle("All Characters (" + (responseJson.info.count) + ")");
+                    }
+                    //Setting load more API
+                    setLoadMoreAPIURL(responseJson.info.next);
+                }
 
                 if (responseJson != null && responseJson.results != null && responseJson.results.length > 0) {
                     //Setting data into state
                     setData(data.concat(responseJson.results));
                 }
-                if (props.updateHeaderTitle != null) {
-                    props.updateHeaderTitle("All Characters (" + (responseJson.info.count) + ")");
-                }
+
                 //Hiding Loading Indicator once data gets loaded
                 setIsLoading(false);
 
@@ -94,17 +104,62 @@ function Characters(props, ref) {
     //Method that updates the total filters count on UI
     const setTotalFilterPageCount = (statusFilters, gendeFilters) => {
         let totalFiltersCount = 0;
+        let filterQueryString = '';
         statusFilters.forEach(function (status) {
             if (status.checked) {
+                filterQueryString = filterQueryString.concat('&status=', status.name);
                 totalFiltersCount++;
             }
         });
         gendeFilters.forEach(function (gender) {
             if (gender.checked) {
+                filterQueryString = filterQueryString.concat('&gender=', gender.name);
                 totalFiltersCount++;
             }
         });
         props.updateFiltersCount != null && props.updateFiltersCount(totalFiltersCount);
+        //Resetting current page and character data before executing filter page data
+        setCurrentPage(0);
+        setData([]);
+        setIsLoading(true);
+        //Checking if any filter parameter is set or not then load character data based on filter parameter set on filter page
+        if (filterQueryString != null && filterQueryString.length > 0) {
+            filterQueryString = filterQueryString.substring(1);
+            setFilterPageQueryString(filterQueryString);
+            loadCharactersFilterData(filterQueryString);
+        } else {
+            setFilterPageQueryString('');
+            //Load Charater Data
+            loadCharactersData();
+        }
+    }
+    //Method to Load Character Data
+    const loadCharactersFilterData = async (filterDataQueryString) => {
+        fetch("https://rickandmortyapi.com/api/character/?&page=" + currentPage + "&" + filterDataQueryString)
+            .then(response => response.json())
+            .then(responseJson => {
+                if (responseJson != null && responseJson.info != null) {
+                    if (props.updateHeaderTitle != null) {
+                        props.updateHeaderTitle("All Characters (" + (responseJson.info.count) + ")");
+                    }
+                    //Setting load more API
+                    setLoadMoreAPIURL(responseJson.info.next);
+                }
+                if (responseJson != null && responseJson.results != null && responseJson.results.length > 0) {
+                    //Setting data into state
+                    //setData(data.concat(responseJson.results));
+                    setData(responseJson.results);
+
+                }
+
+                //Hiding Loading Indicator once data gets loaded
+                setIsLoading(false);
+
+
+            }).catch(error => {
+                console.log('Error selecting random data: ' + error)
+            })
+
     }
     //Method which handles filter page cancel button click and handle pop-up show / hide and updating total filter counts
     const HandleCancelButtonClick = React.useCallback((statusCheckBoxesData, genderCheckBoxesData) => {
