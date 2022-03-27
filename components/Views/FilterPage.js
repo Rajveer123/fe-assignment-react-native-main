@@ -1,26 +1,35 @@
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import React, { useState, useEffect } from 'react';
 export default function FilterPage(props) {
+
     if (!props.isFilterPageVisible) {
         return null;
     }
+    const [statusCheckboxes, setStatusCheckboxes] = useState([]);
+    useEffect(() => {
+        if (props.StausCheckBoxes != null && JSON.parse(props.StausCheckBoxes.length) == 0) {
+            setStatusCheckboxes([{
+                id: 1,
+                title: 'Alive',
+                name: 'alive',
+                checked: false,
+            }, {
+                id: 2,
+                title: 'Dead',
+                name: 'dead',
+                checked: false,
+            }, {
+                id: 3,
+                title: 'Unknown',
+                name: 'unknown',
+                checked: false,
+            }]);
+        } else {
+            setStatusCheckboxes(props.StausCheckBoxes);
+        }
+    }, []);
 
-    const [statusCheckboxes, setStatusCheckboxes] = useState([{
-        id: 1,
-        title: 'Alive',
-        name: 'alive',
-        checked: false,
-    }, {
-        id: 2,
-        title: 'Dead',
-        name: 'dead',
-        checked: false,
-    }, {
-        id: 3,
-        title: 'Unknown',
-        name: 'unknown',
-        checked: false,
-    }]);
+
 
     const toggleStatsCheckbox = (id, index) => {
         const statusCheckboxData = [...statusCheckboxes];
@@ -28,8 +37,7 @@ export default function FilterPage(props) {
         setStatusCheckboxes(statusCheckboxData);
     }
     const HandleCancelButtonClick = () => {
-        const selectedCheckBoxes = statusCheckboxes.find((cb) => cb.checked === true);
-        props.HandleCancelButtonClick != null && props.HandleCancelButtonClick("Rajveer", 2);
+        props.HandleCancelButtonClick != null && props.HandleCancelButtonClick(statusCheckboxes);
     }
 
     const StatusCheckboxesView = (function () {

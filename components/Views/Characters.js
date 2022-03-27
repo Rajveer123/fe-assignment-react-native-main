@@ -23,6 +23,7 @@ function Characters(props, ref) {
     const [showTostMessage, setShowTostMessage] = useState(false);
     //Filter Page Related States
     const [showFilterPage, setShowFilterPage] = useState(false);
+    const [filterPageStatusData, setFilterPageStatusData] = useState([]);
 
     useImperativeHandle(ref, () => ({
         // Open Filter Page Popup Window
@@ -91,7 +92,8 @@ function Characters(props, ref) {
             toastMessagetimeOut = null;
         }, 1000);
     });
-    const HandleCancelButtonClick = React.useCallback((serachString, filterCounts) => {
+    const HandleCancelButtonClick = React.useCallback((statusCheckBoxesData) => {
+        setFilterPageStatusData(statusCheckBoxesData);
         setShowFilterPage(false)
     });
     return (
@@ -112,7 +114,7 @@ function Characters(props, ref) {
                     ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                 />
                 <TostMessage type={toastMessageType} message={toastMessage} isTostMessageVisible={showTostMessage} />
-                <FilterPage isFilterPageVisible={showFilterPage} HandleCancelButtonClick={HandleCancelButtonClick} />
+                <FilterPage isFilterPageVisible={showFilterPage} HandleCancelButtonClick={HandleCancelButtonClick} StausCheckBoxes={filterPageStatusData} />
             </View>
         </View>
 
