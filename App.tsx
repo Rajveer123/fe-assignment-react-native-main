@@ -62,6 +62,10 @@ export default function App() {
   const HandleFilterPage = () => {
     childRef.current.openFilterPagePopWindow()
   }
+  //Method to update fitler page counts
+  const HandleUpdateFilterCounts = React.useCallback((filterPageCounts) => {
+    setFilterPageBadgeCount(filterPageCounts);
+  }, []);
 
   return (
 
@@ -88,7 +92,7 @@ export default function App() {
 
         })}>
         <Tab.Screen name="Characters"
-          children={() => <Characters ref={childRef} updateHeaderTitle={updateCharacterTabTitle} />}
+          children={() => <Characters ref={childRef} updateHeaderTitle={updateCharacterTabTitle} updateFiltersCount={HandleUpdateFilterCounts} />}
           options={{
             headerStatusBarHeight: 64,
             headerTitle: charactersTabHeaderTitle, tabBarLabel: "Characters", headerShown: true, headerTintColor: 'green', headerTitleAlign: 'left', headerRight: () => (

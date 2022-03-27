@@ -26,6 +26,7 @@ function Characters(props, ref) {
     const [filterPageStatusData, setFilterPageStatusData] = useState([]);
     const [filterPageGenderData, setFilterPageGenderData] = useState([]);
 
+    //Handle Child view click from Parent 
     useImperativeHandle(ref, () => ({
         // Open Filter Page Popup Window
         openFilterPagePopWindow: () => {
@@ -40,7 +41,7 @@ function Characters(props, ref) {
         loadCharactersData();
     }
 
-    //Method to Load Data
+    //Method to Load Character Data
     const loadCharactersData = async () => {
         fetch("https://rickandmortyapi.com/api/character/?&page=" + currentPage)
             .then(response => response.json())
@@ -71,9 +72,6 @@ function Characters(props, ref) {
                 </View> : null
         )
     }
-
-
-
     useEffect(() => {
         //Showing Activity Indicator while List is Loading Data
         setIsLoading(true);
@@ -93,10 +91,27 @@ function Characters(props, ref) {
             toastMessagetimeOut = null;
         }, 1000);
     });
+    //Method that updates the total filters count on UI
+    const setTotalFilterPageCount = (statusFilters, gendeFilters) => {
+        let totalFiltersCount = 0;
+        statusFilters.forEach(function (status) {
+            if (status.checked) {
+                totalFiltersCount++;
+            }
+        });
+        gendeFilters.forEach(function (gender) {
+            if (gender.checked) {
+                totalFiltersCount++;
+            }
+        });
+        props.updateFiltersCount != null && props.updateFiltersCount(totalFiltersCount);
+    }
+    //Method which handles filter page cancel button click and handle pop-up show / hide and updating total filter counts
     const HandleCancelButtonClick = React.useCallback((statusCheckBoxesData, genderCheckBoxesData) => {
         setFilterPageStatusData(statusCheckBoxesData);
         setFilterPageGenderData(genderCheckBoxesData);
         setShowFilterPage(false)
+        setTotalFilterPageCount(statusCheckBoxesData, genderCheckBoxesData);
     });
     return (
 
