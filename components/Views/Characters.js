@@ -91,7 +91,9 @@ function Characters(props, ref) {
             toastMessagetimeOut = null;
         }, 1000);
     });
-
+    const HandleCancelButtonClick = React.useCallback((serachString, filterCounts) => {
+        setShowFilterPage(false)
+    });
     return (
 
         <View style={{ display: 'flex', flex: 1, backgroundColor: 'white', width: windowWidth, height: windowHeight }}>
@@ -110,7 +112,7 @@ function Characters(props, ref) {
                     ItemSeparatorComponent={() => <View style={{ height: 15, backgroundColor: 'transparent' }} />}
                 />
                 <TostMessage type={toastMessageType} message={toastMessage} isTostMessageVisible={showTostMessage} />
-                <FilterPage isFilterPageVisible={showFilterPage} />
+                <FilterPage isFilterPageVisible={showFilterPage} HandleCancelButtonClick={HandleCancelButtonClick} />
             </View>
         </View>
 
