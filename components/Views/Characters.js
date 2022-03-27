@@ -25,7 +25,6 @@ function Characters(props, ref) {
     const [showFilterPage, setShowFilterPage] = useState(false);
     const [filterPageStatusData, setFilterPageStatusData] = useState([]);
     const [filterPageGenderData, setFilterPageGenderData] = useState([]);
-    const [filterPageQueryString, setFilterPageQueryString] = useState('');
     const [loadMoreAPIURL, setLoadMoreAPIURL] = useState('');
 
     //Handle Child view click from Parent 
@@ -45,8 +44,8 @@ function Characters(props, ref) {
     }
 
     //Method to Load Character Data
-    const loadCharactersData = async (loadMoreAPI = null) => {
-        const apiURL = loadMoreAPI != null ? loadMoreAPI : "https://rickandmortyapi.com/api/character/?&page=" + currentPage;
+    const loadCharactersData = async (loadMoreAPI = null, filterPageQueryString = null) => {
+        const apiURL = loadMoreAPI != null ? loadMoreAPI : ((filterPageQueryString != null && filterPageQueryString.length > 0) ? "https://rickandmortyapi.com/api/character/?&page=" + currentPage + "&" + filterPageQueryString : "https://rickandmortyapi.com/api/character/?&page=" + currentPage);
         fetch(apiURL)
             .then(response => response.json())
             .then(responseJson => {
@@ -61,7 +60,16 @@ function Characters(props, ref) {
 
                 if (responseJson != null && responseJson.results != null && responseJson.results.length > 0) {
                     //Setting data into state
-                    setData(data.concat(responseJson.results));
+                    //setData(data.concat(responseJson.results));
+                    if (filterPageQueryString != null && filterPageQueryString.length > 0 && loadMoreAPI == null) {
+                        //come from filter
+                        setData(responseJson.results);
+                    } else {
+                        //loading without filter data
+                        setData(responseJson.results.concat(data));
+                    }
+
+
                 }
 
                 //Hiding Loading Indicator once data gets loaded
@@ -125,40 +133,12 @@ function Characters(props, ref) {
         //Checking if any filter parameter is set or not then load character data based on filter parameter set on filter page
         if (filterQueryString != null && filterQueryString.length > 0) {
             filterQueryString = filterQueryString.substring(1);
-            setFilterPageQueryString(filterQueryString);
-            loadCharactersFilterData(filterQueryString);
+            //Load Charater Data along with filter query string
+            loadCharactersData(null, filterQueryString);
         } else {
-            setFilterPageQueryString('');
             //Load Charater Data
             loadCharactersData();
         }
-    }
-    //Method to Load Character Data
-    const loadCharactersFilterData = async (filterDataQueryString) => {
-        fetch("https://rickandmortyapi.com/api/character/?&page=" + currentPage + "&" + filterDataQueryString)
-            .then(response => response.json())
-            .then(responseJson => {
-                if (responseJson != null && responseJson.info != null) {
-                    if (props.updateHeaderTitle != null) {
-                        props.updateHeaderTitle("All Characters (" + (responseJson.info.count) + ")");
-                    }
-                    //Setting load more API
-                    setLoadMoreAPIURL(responseJson.info.next);
-                }
-                if (responseJson != null && responseJson.results != null && responseJson.results.length > 0) {
-                    //Setting data into state
-                    //setData(data.concat(responseJson.results));
-                    setData(responseJson.results);
-
-                }
-
-                //Hiding Loading Indicator once data gets loaded
-                setIsLoading(false);
-
-
-            }).catch(error => {
-                console.log('Error selecting random data: ' + error)
-            })
 
     }
     //Method which handles filter page cancel button click and handle pop-up show / hide and updating total filter counts
