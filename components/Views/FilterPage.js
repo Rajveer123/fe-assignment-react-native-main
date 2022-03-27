@@ -15,8 +15,17 @@ export default function FilterPage(props) {
                     <Image source={require('../../assets/cancel_icon.png')}
                         style={{ width: 40, height: 40, alignSelf: 'flex-end', margin: 10 }} />
                 </TouchableWithoutFeedback>
-                <View style={{ margin: 20, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-                    <Text style={{ color: 'black', fontSize: 20 }}>Filter Page Pop-up Window</Text>
+                <View style={{ margin: 20, justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex', flexDirection: 'column' }}>
+                    <Text style={{ color: 'green', fontSize: 25, fontWeight: '600' }}>Filters</Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 20, flexBasis: 30 }}>
+                        <Text style={{ color: 'black', fontSize: 20, fontWeight: '500' }}>Status</Text>
+                        <Text style={{ color: 'black', fontSize: 20, fontWeight: '500', marginLeft: 30 }}>Active</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', marginTop: 20, flexBasis: 30 }}>
+                        <Text style={{ color: 'black', fontSize: 20, fontWeight: '500' }}>Name</Text>
+                        <Text style={{ color: 'black', fontSize: 20, fontWeight: '500', marginLeft: 30 }}>Rajveer</Text>
+                    </View>
+
                 </View>
             </View>
         </View>
